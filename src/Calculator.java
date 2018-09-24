@@ -4,7 +4,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -18,7 +17,6 @@ public class Calculator extends Application {
     boolean equality;
     @Override
     public void start(Stage primaryStage) {
-
         supMath = new SupMath();
         flag = true;
         equality = false;
@@ -28,7 +26,7 @@ public class Calculator extends Application {
         Font font = new Font(30);
         screen = new Label("0");
         screen.setFont(font);
-        screen.setMaxSize(scene.getWidth(),40);
+        screen.setMaxSize(300,40);
         screen.setMinSize(300,40);
         Font font1 = new Font(20);
         GridPane gridPane = new GridPane();
@@ -37,10 +35,28 @@ public class Calculator extends Application {
         percent.setFont(font1);
         gridPane.add(percent,0,0);
         percent.setMinSize(75,50);
+
+        percent.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+              screen.setText(supMath.gerPercent());
+                flag = true;
+            }
+        });
+
         Button root = new Button("√");
         root.setFont(font1);
         gridPane.add(root,1,0);
         root.setMinSize(75,50);
+        root.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                screen.setText(supMath.sqrt());
+                flag = true;
+            }
+        });
+
         Button degree2 = new Button("x²");
         degree2.setFont(font1);
         gridPane.add(degree2,2,0);
@@ -70,6 +86,7 @@ public class Calculator extends Application {
             public void handle(ActionEvent event) {
             screen.setText("0");
             supMath.setLastSum("0");
+            supMath.setLastSign('=');
             supMath.setLastChar('=');
             supMath.setFirstSum("0");
             flag = true;
@@ -89,15 +106,18 @@ public class Calculator extends Application {
             share.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    if (supMath.getLastChar() == '+') {
-                        screen.setText(supMath.summa());
-                    } else if (supMath.getLastChar() == '-') {
-                        screen.setText(supMath.minus());
-                    } else if (supMath.getLastChar() == '×') {
-                        screen.setText(supMath.mult());
-                    } else {
-                        screen.setText(supMath.shared());
+                    if (!(supMath.getLastChar()=='=')) {
+                        if (supMath.getLastSign() == '+') {
+                            screen.setText(supMath.summa());
+                        } else if (supMath.getLastSign() == '-') {
+                            screen.setText(supMath.minus());
+                        } else if (supMath.getLastSign() == '×') {
+                            screen.setText(supMath.mult());
+                        } else {
+                            screen.setText(supMath.shared());
+                        }
                     }
+                    supMath.setLastSign('÷');
                     supMath.setLastChar('÷');
                     flag = true;
                 }
@@ -117,7 +137,9 @@ public class Calculator extends Application {
                  flag = false;
                     screen.setText(supMath.getLastSum());}
                 else {screen.setText(supMath.getLastSum()+7);
-                      supMath.setLastSum(screen.getText()); } ;
+                      supMath.setLastSum(screen.getText());
+                } ;
+                supMath.setLastChar('7');
             }
         });
         Button int8 = new Button("8");
@@ -134,6 +156,7 @@ public class Calculator extends Application {
                 else {screen.setText(supMath.getLastSum()+8);
                     supMath.setLastSum(screen.getText());  ;
         }
+                supMath.setLastChar('8');
             }
         }
         );
@@ -150,7 +173,8 @@ public class Calculator extends Application {
                     screen.setText(supMath.getLastSum());}
                 else {screen.setText(supMath.getLastSum()+9);
                     supMath.setLastSum(screen.getText());  ;
-                }}
+                }
+                supMath.setLastChar('9');}
         });
         Button multiply = new Button("×");
         multiply.setFont(font1);
@@ -159,17 +183,18 @@ public class Calculator extends Application {
         multiply.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(supMath.getLastChar()=='+') {
-                    screen.setText(supMath.summa());
+                if (!(supMath.getLastChar()=='=')) {
+                    if (supMath.getLastSign() == '+') {
+                        screen.setText(supMath.summa());
+                    } else if (supMath.getLastSign() == '-') {
+                        screen.setText(supMath.minus());
+                    } else if (supMath.getLastSign() == '÷') {
+                        screen.setText(supMath.shared());
+                    } else {
+                        screen.setText(supMath.mult());
+                    }
                 }
-                if(supMath.getLastChar()=='-') {
-                    screen.setText(supMath.minus());
-                }
-                if(supMath.getLastChar()=='÷') {
-                    screen.setText(supMath.shared());
-                }
-                else
-                    screen.setText(supMath.mult());
+                supMath.setLastSign('×');
                 supMath.setLastChar('×');
                 flag = true;
             }
@@ -189,6 +214,7 @@ public class Calculator extends Application {
                 else {screen.setText(supMath.getLastSum()+4);
                     supMath.setLastSum(screen.getText());  ;
                 }
+                supMath.setLastChar('4');
             }
         });
         Button int5 = new Button("5");
@@ -205,6 +231,7 @@ public class Calculator extends Application {
                 else {screen.setText(supMath.getLastSum()+5);
                     supMath.setLastSum(screen.getText());  ;
                 }
+                supMath.setLastChar('5');
             }
         });
         Button int6 = new Button("6");
@@ -221,6 +248,7 @@ public class Calculator extends Application {
                 else {screen.setText(supMath.getLastSum()+6);
                     supMath.setLastSum(screen.getText());  ;
                 }
+                supMath.setLastChar('6');
             }
         });
         Button minus = new Button("-");
@@ -230,17 +258,19 @@ public class Calculator extends Application {
         minus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(supMath.getLastChar()=='+') {
-                    screen.setText(supMath.summa());
+                if (!(supMath.getLastChar()=='=')) {
+                    if (supMath.getLastSign() == '+') {
+                        screen.setText(supMath.summa());
+                    }
+                    if (supMath.getLastSign() == '×') {
+                        screen.setText(supMath.mult());
+                    }
+                    if (supMath.getLastSign() == '÷') {
+                        screen.setText(supMath.shared());
+                    } else
+                        screen.setText(supMath.minus());
                 }
-                if(supMath.getLastChar()=='×') {
-                    screen.setText(supMath.mult());
-                }
-                if(supMath.getLastChar()=='÷') {
-                    screen.setText(supMath.shared());
-                }
-                else
-                    screen.setText(supMath.minus());
+                supMath.setLastSign('-');
                 supMath.setLastChar('-');
                 flag = true;
             }
@@ -260,6 +290,7 @@ public class Calculator extends Application {
                 else {screen.setText(supMath.getLastSum()+1);
                     supMath.setLastSum(screen.getText());  ;
                 }
+                supMath.setLastChar('1');
             }
         });
 
@@ -277,6 +308,7 @@ public class Calculator extends Application {
                 else {screen.setText(supMath.getLastSum()+2);
                     supMath.setLastSum(screen.getText());  ;
                 }
+                supMath.setLastChar('2');
             }
         });
 
@@ -294,6 +326,7 @@ public class Calculator extends Application {
                 else {screen.setText(supMath.getLastSum()+3);
                     supMath.setLastSum(screen.getText());  ;
                 }
+                supMath.setLastChar('3');
             }
 
         });
@@ -305,19 +338,21 @@ public class Calculator extends Application {
         plus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                    if (supMath.getLastChar() == '-') {
+             if (!(supMath.getLastChar()=='=')) {
+                    if (supMath.getLastSign() == '-') {
                         screen.setText(supMath.minus());
                     }
-                    if (supMath.getLastChar() == '×') {
+                    if (supMath.getLastSign() == '×') {
                         screen.setText(supMath.mult());
                     }
-                    if (supMath.getLastChar() == '÷') {
+                    if (supMath.getLastSign() == '÷') {
                         screen.setText(supMath.shared());
                     } else {
                         screen.setText(supMath.summa());
                         System.out.println("в методе сумма");
                     }
+                }
+                supMath.setLastSign('+');
                 supMath.setLastChar('+');
                 flag = true;
             }
@@ -345,6 +380,7 @@ public class Calculator extends Application {
                 else {screen.setText(supMath.getLastSum()+0);
                     supMath.setLastSum(screen.getText());  ;
                 }
+                supMath.setLastChar('0');
             }
         });
 
@@ -373,7 +409,7 @@ public class Calculator extends Application {
             @Override
             public void handle(ActionEvent event) {
                 String temp = supMath.getLastSum();
-                switch (supMath.getLastChar()){
+                switch (supMath.getLastSign()){
                     case '+':
                         screen.setText(supMath.summa());
                        break;
@@ -385,6 +421,7 @@ public class Calculator extends Application {
                         break;
                 }
                 supMath.setLastSum(temp);
+                supMath.setLastChar('=');
                 flag = true;
             }
         });
