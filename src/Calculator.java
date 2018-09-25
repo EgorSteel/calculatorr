@@ -14,7 +14,6 @@ public class Calculator extends Application {
     Label screen;
     SupMath supMath;
     boolean flag;
-    boolean equality;
     @Override
     public void start(Stage primaryStage) {
         supMath = new SupMath();
