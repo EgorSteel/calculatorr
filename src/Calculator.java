@@ -19,10 +19,9 @@ public class Calculator extends Application {
     public void start(Stage primaryStage) {
         supMath = new SupMath();
         flag = true;
-        equality = false;
         primaryStage.setTitle("Calculator");
         FlowPane rootPane = new FlowPane();
-        Scene scene = new Scene(rootPane, 300,350);
+        Scene scene = new Scene(rootPane, 300,340);
         Font font = new Font(30);
         screen = new Label("0");
         screen.setFont(font);
@@ -30,6 +29,7 @@ public class Calculator extends Application {
         screen.setMinSize(300,40);
         Font font1 = new Font(20);
         GridPane gridPane = new GridPane();
+        GridPane gridPane2 = new GridPane();
 
         Button percent = new Button("%");
         percent.setFont(font1);
@@ -51,9 +51,37 @@ public class Calculator extends Application {
         root.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                try {
+                    if (!(supMath.getLastSign() == '=')) {
+                        if (supMath.getLastSign() == '+') {
+                            supMath.sqrt();
+                            screen.setText(supMath.summa());
+                        } else if (supMath.getLastSign() == '-') {
+                            supMath.sqrt();
+                            screen.setText(supMath.minus());
+                        } else if (supMath.getLastSign() == '×') {
+                            supMath.sqrt();
+                            screen.setText(supMath.mult());
+                        } else if (supMath.getLastSign() == '÷') {
+                            supMath.sqrt();
+                            screen.setText(supMath.shared());
+                        }
+                    } else {
+                        screen.setText(supMath.sqrt());
+                    }
+                    supMath.setLastSign('√');
+                    flag = true;
+                    supMath.setLastChar('√');
+                }
+                catch (NumberFormatException ex){
+                    screen.setText("Нельзя извлечь √ из отриц. числа");
+                    supMath.setLastSum("0");
+                    supMath.setLastSign('=');
+                    supMath.setLastChar('=');
+                    supMath.setFirstSum("0");
+                    flag = true;
 
-                screen.setText(supMath.sqrt());
-                flag = true;
+                }
             }
         });
 
@@ -61,15 +89,36 @@ public class Calculator extends Application {
         degree2.setFont(font1);
         gridPane.add(degree2,2,0);
         degree2.setMinSize(75,50);
-        Button oneShareX = new Button("1/x");
-        oneShareX.setFont(font1);
-        gridPane.add(oneShareX,3,0);
-        oneShareX.setMinSize(75,50);
+        degree2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (!(supMath.getLastSign() == '=')) {
+                    if (supMath.getLastSign() == '+') {
+                        supMath.degree2();
+                        screen.setText(supMath.summa());
+                    } else if (supMath.getLastSign() == '-') {
+                        supMath.degree2();
+                        screen.setText(supMath.minus());
+                    } else if (supMath.getLastSign() == '×') {
+                        supMath.degree2();
+                        screen.setText(supMath.mult());
+                    } else if (supMath.getLastSign() == '÷') {
+                        supMath.degree2();
+                        screen.setText(supMath.shared());
+                    }
+                } else {
+                    screen.setText(supMath.degree2());
+                }
+                supMath.setLastSign('q');
+                flag = true;
+                supMath.setLastChar('q');
+            }
+        });
 
         Button cCe = new Button("CE");
         cCe.setFont(font1);
-        gridPane.add(cCe,0,1);
-        cCe.setMinSize(75,50);
+        gridPane2.add(cCe,0,0);
+        cCe.setMinSize(150,50);
         cCe.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -79,8 +128,8 @@ public class Calculator extends Application {
         });
         Button cC = new Button("C");
         cC.setFont(font1);
-        gridPane.add(cC,1,1);
-        cC.setMinSize(75,50);
+        gridPane2.add(cC,1,0);
+        cC.setMinSize(150,50);
         cC.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -92,14 +141,10 @@ public class Calculator extends Application {
             flag = true;
             }
         });
-        Button remove = new Button("⌫");
-        remove.setFont(font1);
-        gridPane.add(remove,2,1);
-        remove.setMinSize(75,50);
 
         Button share = new Button("÷");
         share.setFont(font1);
-        gridPane.add(share,3,1);
+        gridPane.add(share,3,0);
         share.setMinSize(75,50);
 
 
@@ -127,7 +172,7 @@ public class Calculator extends Application {
 
         Button int7 = new Button("7");
         int7.setFont(font1);
-        gridPane.add(int7,0,2);
+        gridPane.add(int7,0,1);
         int7.setMinSize(75,50);
         int7.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -144,7 +189,7 @@ public class Calculator extends Application {
         });
         Button int8 = new Button("8");
         int8.setFont(font1);
-        gridPane.add(int8,1,2);
+        gridPane.add(int8,1,1);
         int8.setMinSize(75,50);
         int8.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -162,7 +207,7 @@ public class Calculator extends Application {
         );
         Button int9 = new Button("9");
         int9.setFont(font1);
-        gridPane.add(int9,2,2);
+        gridPane.add(int9,2,1);
         int9.setMinSize(75,50);
         int9.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -178,7 +223,7 @@ public class Calculator extends Application {
         });
         Button multiply = new Button("×");
         multiply.setFont(font1);
-        gridPane.add(multiply,3,2);
+        gridPane.add(multiply,3,1);
         multiply.setMinSize(75,50);
         multiply.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -202,7 +247,7 @@ public class Calculator extends Application {
 
         Button int4 = new Button("4");
         int4.setFont(font1);
-        gridPane.add(int4,0,3);
+        gridPane.add(int4,0,2);
         int4.setMinSize(75,50);
         int4.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -219,7 +264,7 @@ public class Calculator extends Application {
         });
         Button int5 = new Button("5");
         int5.setFont(font1);
-        gridPane.add(int5,1,3);
+        gridPane.add(int5,1,2);
         int5.setMinSize(75,50);
         int5.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -236,7 +281,7 @@ public class Calculator extends Application {
         });
         Button int6 = new Button("6");
         int6.setFont(font1);
-        gridPane.add(int6,2,3);
+        gridPane.add(int6,2,2);
         int6.setMinSize(75,50);
         int6.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -253,7 +298,7 @@ public class Calculator extends Application {
         });
         Button minus = new Button("-");
         minus.setFont(font1);
-        gridPane.add(minus,3,3);
+        gridPane.add(minus,3,2);
         minus.setMinSize(75,50);
         minus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -278,7 +323,7 @@ public class Calculator extends Application {
 
         Button int1 = new Button("1");
         int1.setFont(font1);
-        gridPane.add(int1,0,4);
+        gridPane.add(int1,0,3);
         int1.setMinSize(75,50);
         int1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -296,7 +341,7 @@ public class Calculator extends Application {
 
         Button int2 = new Button("2");
         int2.setFont(font1);
-        gridPane.add(int2,1,4);
+        gridPane.add(int2,1,3);
         int2.setMinSize(75,50);
         int2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -314,7 +359,7 @@ public class Calculator extends Application {
 
         Button int3 = new Button("3");
         int3.setFont(font1);
-        gridPane.add(int3,2,4);
+        gridPane.add(int3,2,3);
         int3.setMinSize(75,50);
         int3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -333,7 +378,7 @@ public class Calculator extends Application {
 
         Button plus = new Button("+");
         plus.setFont(font1);
-        gridPane.add(plus,3,4);
+        gridPane.add(plus,3,3);
         plus.setMinSize(75,50);
         plus.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -349,7 +394,6 @@ public class Calculator extends Application {
                         screen.setText(supMath.shared());
                     } else {
                         screen.setText(supMath.summa());
-                        System.out.println("в методе сумма");
                     }
                 }
                 supMath.setLastSign('+');
@@ -362,12 +406,38 @@ public class Calculator extends Application {
 
         Button plusMinus = new Button("±");
         plusMinus.setFont(font1);
-        gridPane.add(plusMinus,0,5);
+        gridPane.add(plusMinus,0,4);
         plusMinus.setMinSize(75,50);
+        plusMinus.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (!(supMath.getLastSign() == '=')) {
+                    if (supMath.getLastSign() == '+') {
+                        supMath.negateSign();
+                        screen.setText(supMath.summa());
+                    } else if (supMath.getLastSign() == '-') {
+                        supMath.negateSign();
+                        screen.setText(supMath.minus());
+                    } else if (supMath.getLastSign() == '×') {
+                        supMath.negateSign();
+                        screen.setText(supMath.mult());
+                    } else if (supMath.getLastSign() == '÷') {
+                        supMath.negateSign();
+                        screen.setText(supMath.shared());
+                    }
+                } else {
+                    screen.setText(supMath.negateSign());
+                }
+                supMath.setLastSign('±');
+                flag = true;
+                supMath.setLastChar('±');
+            }
+        });
+
 
         Button zero = new Button("0");
         zero.setFont(font1);
-        gridPane.add(zero,1,5);
+        gridPane.add(zero,1,4);
         zero.setMinSize(75,50);
         zero.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -386,7 +456,7 @@ public class Calculator extends Application {
 
         Button dot = new Button(".");
         dot.setFont(font1);
-        gridPane.add(dot,2,5);
+        gridPane.add(dot,2,4);
         dot.setMinSize(75,50);
         dot.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -403,31 +473,37 @@ public class Calculator extends Application {
 
         Button equally = new Button("=");
         equally.setFont(font1);
-        gridPane.add(equally,3,5);
+        gridPane.add(equally,3,4);
         equally.setMinSize(75,50);
         equally.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String temp = supMath.getLastSum();
-                switch (supMath.getLastSign()){
-                    case '+':
-                        screen.setText(supMath.summa());
-                       break;
-                    case '-': screen.setText(supMath.minus());
-                       break;
-                    case '×': screen.setText(supMath.mult());
-                        break;
-                    case '÷': screen.setText(supMath.shared());
-                        break;
-                }
-                supMath.setLastSum(temp);
+                    String temp = supMath.getLastSum();
+                    switch (supMath.getLastSign()) {
+                        case '+':
+                            screen.setText(supMath.summa());
+                            break;
+                        case '-':
+                            screen.setText(supMath.minus());
+                            break;
+                        case '×':
+                            screen.setText(supMath.mult());
+                            break;
+                        case '÷':
+                            screen.setText(supMath.shared());
+                            break;
+//                        case '√':
+//                            screen.setText(supMath.sqrt());
+//                            break;
+                    }
+                    supMath.setLastSum(temp);
                 supMath.setLastChar('=');
                 flag = true;
             }
         });
         primaryStage.setScene(scene);
-        FlowPane flowPane = new FlowPane(10,10);
-        flowPane.getChildren().addAll(screen,gridPane );
+        FlowPane flowPane = new FlowPane(0,0);
+        flowPane.getChildren().addAll(screen,gridPane,gridPane2 );
         rootPane.getChildren().add(flowPane);
         primaryStage.show();
 
